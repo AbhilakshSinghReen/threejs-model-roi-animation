@@ -1,5 +1,5 @@
 import apiEndpoints from "./apiEndpoints";
-import { tryParseJsonString } from "../utils/jsUtils";
+import { tryParseJsonString } from "./jsUtils";
 
 class ApiClient {
   constructor() {
@@ -24,6 +24,12 @@ class ApiClient {
         }
 
         responseData.result.report.meshes_metadata = tryParseJsonString(responseData.result.report.meshes_metadata);
+        for (let i = 0; i < responseData.result.report.meshes_metadata.meshes.length; i++) {
+          responseData.result.report.meshes_metadata.meshes[i] = {
+            ...responseData.result.report.meshes_metadata.meshes[i],
+            geometricOrigin: tryParseJsonString(responseData.result.report.meshes_metadata.meshes[i].geometricOrigin),
+          };
+        }
         // responseData.result.report.original_report = tryParseJsonString(responseData.result.report.original_report);
         responseData.result.report.simplified_reports = tryParseJsonString(
           responseData.result.report.simplified_reports
