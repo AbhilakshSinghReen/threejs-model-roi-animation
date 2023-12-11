@@ -15,7 +15,7 @@
 // }
 
 let apiBaseUrl = "http://localhost:8000/api/radio-reports"
-let mediaBaseUrl = "http://localhost:8000/mediaF"
+let mediaBaseUrl = "http://localhost:8000/media"
 
 const segmentMeshesUrlPrefix = mediaBaseUrl + "/segment-meshes";
 

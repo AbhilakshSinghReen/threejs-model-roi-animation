@@ -2,6 +2,7 @@ import "./style.css";
 
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { mediaBaseUrl } from "./apiEndpoints";
 
 import segmentMeshRenderingConfig from "./segmentMaterials.json";
 import apiClient from "./apiServices";
@@ -15,7 +16,21 @@ async function main() {
   }
 
   const reportData = responseData.result.report;
-  console.log(reportData.meshes_metadata);
+  const volumeShape = reportData.meshes_metadata.input_volume.shape;
+  const regionsOfInterest = reportData.meshes_metadata.segmentsOfInterest;
+
+  let currentRoiIndex = -1;
+  let currentRoiMeshName = null;
+  let currentRoiShape = volumeShape;
+  let currentRoiMeshMetadata = reportData.meshes_metadata.meshes.find(
+    (meshMeta) => meshMeta.name === currentRoiMeshName
+  );
+  let currentRoiGeometricOrigin = [0, volumeShape[1] / 2, 0];
+  if (currentRoiMeshMetadata) {
+    currentRoiGeometricOrigin = currentRoiMeshMetadata.geometricOrigin;
+  }
+
+  const gltfModelUrl = mediaBaseUrl + `/segment-meshes/${reportData.report_media_id}/model.gltf`;
 
   const AnimationStates = {
     ROI_ZOOM_IN: Symbol("ROI_ZOOM_IN"),
@@ -33,21 +48,18 @@ async function main() {
 
   let animationState = AnimationStates.ROI_ZOOM_IN;
 
-  let volumeShape = [512, 512, 270];
-  let roiShape = [512, 512, 270];
-  let roiGeometricOrigin = [0, 135, 0];
-
   let nonRoiOpacity = 1;
 
-  let cameraDistanceFromLookAt = cameraDistanceFromLookAtToRoiDimsRatio * Math.min(roiShape[0], roiShape[1]);
+  let cameraDistanceFromLookAt =
+    cameraDistanceFromLookAtToRoiDimsRatio * Math.min(currentRoiShape[0], currentRoiShape[1]);
   let lastCameraDistanceFromLookAt = cameraDistanceFromLookAt;
-  let cameraHeightAboveLookAt = roiShape[2] * cameraHeightAboveLookAtToRoiHeightRatio;
-  let rois = [];
-  let currentRoiIndex = -1;
+  let cameraHeightAboveLookAt = currentRoiShape[2] * cameraHeightAboveLookAtToRoiHeightRatio;
+
   let turnTableStartTimestamp = null;
   let currentTimestamp;
 
   /////
+
   function clampFloat(value, lowerLimit, upperLimit) {
     return Math.max(lowerLimit, Math.min(upperLimit, value));
   }
@@ -80,14 +92,6 @@ async function main() {
     }
 
     return true;
-  }
-
-  function getPointLightPosition(cameraPosition, cameraTargetPosition) {
-    const x = (1 - pointLightPositionRation) * cameraTargetPosition.x + pointLightPositionRation * cameraPosition.x;
-    const y = (1 - pointLightPositionRation) * cameraTargetPosition.y + pointLightPositionRation * cameraPosition.y;
-    const z = (1 - pointLightPositionRation) * cameraTargetPosition.z + pointLightPositionRation * cameraPosition.z;
-
-    return { x, y, z };
   }
 
   function getProperSegmentName(meshName) {
@@ -132,7 +136,7 @@ async function main() {
   // initial position
   camera.position.set(0, cameraHeightAboveLookAt * 2, cameraDistanceFromLookAt * 2);
   camera.lookAt(0, cameraHeightAboveLookAt * 2, 0);
-  cameraBoom.position.set(roiGeometricOrigin[0], roiGeometricOrigin[1], roiGeometricOrigin[2]);
+  cameraBoom.position.set(currentRoiGeometricOrigin[0], currentRoiGeometricOrigin[1], currentRoiGeometricOrigin[2]);
 
   const renderer = new THREE.WebGLRenderer({
     canvas: document.querySelector("#bg"),
@@ -147,7 +151,7 @@ async function main() {
   // load a glTF model
   const gltfLoader = new GLTFLoader();
   gltfLoader.load(
-    `http://localhost:8000/media/segment-meshes/${reportData.report_media_id}/model.gltf`,
+    gltfModelUrl,
     function (gltf) {
       const mainMesh = gltf.scene;
 
@@ -194,9 +198,9 @@ async function main() {
           [
             cameraHeightAboveLookAt,
             cameraDistanceFromLookAt,
-            roiGeometricOrigin[0],
-            roiGeometricOrigin[1],
-            roiGeometricOrigin[2],
+            currentRoiGeometricOrigin[0],
+            currentRoiGeometricOrigin[1],
+            currentRoiGeometricOrigin[2],
           ]
         );
 
@@ -213,10 +217,11 @@ async function main() {
         const animationCompleted = currentTimestamp - turnTableStartTimestamp >= turnTableDuration;
 
         if (animationCompleted) {
-          roiShape = volumeShape;
+          currentRoiShape = volumeShape;
           lastCameraDistanceFromLookAt = cameraDistanceFromLookAt;
-          cameraDistanceFromLookAt = cameraDistanceFromLookAtToRoiDimsRatio * Math.min(roiShape[0], roiShape[1]);
-          cameraHeightAboveLookAt = roiShape[2] * cameraHeightAboveLookAtToRoiHeightRatio;
+          cameraDistanceFromLookAt =
+            cameraDistanceFromLookAtToRoiDimsRatio * Math.min(currentRoiShape[0], currentRoiShape[1]);
+          cameraHeightAboveLookAt = currentRoiShape[2] * cameraHeightAboveLookAtToRoiHeightRatio;
           nonRoiOpacity = 1;
           animationState = AnimationStates.ROI_ZOOM_OUT;
           break;
@@ -230,9 +235,9 @@ async function main() {
           [
             cameraHeightAboveLookAt,
             cameraDistanceFromLookAt,
-            roiGeometricOrigin[0],
-            roiGeometricOrigin[1],
-            roiGeometricOrigin[2],
+            currentRoiGeometricOrigin[0],
+            currentRoiGeometricOrigin[1],
+            currentRoiGeometricOrigin[2],
           ]
         );
 
@@ -250,17 +255,18 @@ async function main() {
         }
 
         currentRoiIndex += 1;
-        if (currentRoiIndex >= rois.length) {
+        if (currentRoiIndex >= regionsOfInterest.length) {
           currentRoiIndex = -1;
           nonRoiOpacity = 1;
           break;
         }
 
-        roiShape = rois[currentRoiIndex].shape;
-        roiGeometricOrigin = rois[currentRoiIndex].roiGeometricOrigin;
+        currentRoiShape = regionsOfInterest[currentRoiIndex].shape;
+        currentRoiGeometricOrigin = regionsOfInterest[currentRoiIndex].currentRoiGeometricOrigin;
         lastCameraDistanceFromLookAt = cameraDistanceFromLookAt;
-        cameraDistanceFromLookAt = cameraDistanceFromLookAtToRoiDimsRatio * Math.min(roiShape[0], roiShape[1]);
-        cameraHeightAboveLookAt = roiShape[2] * cameraHeightAboveLookAtToRoiHeightRatio;
+        cameraDistanceFromLookAt =
+          cameraDistanceFromLookAtToRoiDimsRatio * Math.min(currentRoiShape[0], currentRoiShape[1]);
+        cameraHeightAboveLookAt = currentRoiShape[2] * cameraHeightAboveLookAtToRoiHeightRatio;
         nonRoiOpacity = 0.2;
         animationState = AnimationStates.ROI_ZOOM_IN;
 
@@ -283,9 +289,9 @@ async function main() {
     const updatedCameraHeightAboveLookAt = lerpFloatIfRequired(camera.position.y, cameraHeightAboveLookAt, 1 * 0.001);
     const updatedCameraDistanceFromLookAt = lerpFloatIfRequired(camera.position.z, cameraDistanceFromLookAt, 1 * 0.001);
     const updatedCameraBoomPosition = [
-      lerpFloatIfRequired(cameraBoom.position.x, roiGeometricOrigin[0], 1 * 0.001),
-      lerpFloatIfRequired(cameraBoom.position.y, roiGeometricOrigin[1], 1 * 0.001),
-      lerpFloatIfRequired(cameraBoom.position.z, roiGeometricOrigin[2], 1 * 0.001),
+      lerpFloatIfRequired(cameraBoom.position.x, currentRoiGeometricOrigin[0], 1 * 0.001),
+      lerpFloatIfRequired(cameraBoom.position.y, currentRoiGeometricOrigin[1], 1 * 0.001),
+      lerpFloatIfRequired(cameraBoom.position.z, currentRoiGeometricOrigin[2], 1 * 0.001),
     ];
 
     //
@@ -300,7 +306,7 @@ async function main() {
           return;
         }
 
-        if (node.name === rois[currentRoiIndex].name) {
+        if (node.name === regionsOfInterest[currentRoiIndex].name) {
           return;
         }
 
