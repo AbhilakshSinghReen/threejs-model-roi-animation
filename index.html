@@ -10,17 +10,22 @@
   <body>
     <div id="threejs-scene-displayer">
       <canvas id="bg"></canvas>
-      <button class="animation-button" id="play-pause-button" style="top: 10px">Play</button>
+      <h2 id="current-segment-name-text">Current Segment Name</h2>
+      <button class="animation-button" id="play-pause-button" style="top: 10px">Pause</button>
       <button class="animation-button" id="reset-button" style="top: 40px">Reset</button>
       <button class="animation-button" id="prev-button" style="top: 70px">Prev</button>
-      <button class="animation-button" id="next-button" style="top: 100px">Next</button>
+      <button class="animation-button" id="next-button" style="top: 100 px">Next</button>
     </div>
 
     <div id="text-displayer">
       <div id="text-displayer-header">
         <div id="report-metadata-displayer">
-          <h2>Patient Name</h2>
-          <h2>Report Date</h2>
+          <h2 id="patient-name-text">Patient Name</h2>
+          <span id="report-type-and-date-container">
+            <h2 id="report-type-text">Report Date</h2>
+            <h2 style="margin-right: 5px">:</h2>
+            <h2 id="report-date-text">Report Date</h2>
+          </span>
         </div>
         <div id="simplified-text-language-select-container">
           <select id="simplified-text-language-select">

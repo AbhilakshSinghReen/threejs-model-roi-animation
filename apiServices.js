@@ -23,6 +23,8 @@ class ApiClient {
           return responseData;
         }
 
+        responseData.result.report.report_metadata = tryParseJsonString(responseData.result.report.report_metadata);
+        
         responseData.result.report.meshes_metadata = tryParseJsonString(responseData.result.report.meshes_metadata);
         for (let i = 0; i < responseData.result.report.meshes_metadata.meshes.length; i++) {
           responseData.result.report.meshes_metadata.meshes[i] = {

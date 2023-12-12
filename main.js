@@ -54,6 +54,9 @@ async function main() {
     addInnerTextWithTypewriterEffect(reportTextElement, reportData.simplified_reports[selectedLanguage], 20, 20);
   });
 
+  document.getElementById("report-type-text").innerText = reportData.report_metadata?.reportType;
+  document.getElementById("report-date-text").innerText = reportData.report_metadata?.reportDate;
+
   const animatedScene = new AnimatedScene(reportData);
 
   return;

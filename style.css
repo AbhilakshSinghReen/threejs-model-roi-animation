@@ -8,6 +8,7 @@ body {
 h2 {
   margin: 0;
   padding: 0;
+  z-index: 5;
 }
 
 #threejs-scene-displayer {
@@ -20,6 +21,11 @@ canvas {
   top: 0;
   left: 0;
   height: 500;
+}
+
+#current-segment-name-text {
+  background-color: white;
+  z-index: 5;
 }
 
 .animation-button {
@@ -50,6 +56,13 @@ canvas {
 #report-metadata-displayer {
   width: 60%;
   height: 100%;
+}
+
+#report-type-and-date-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 #simplified-text-language-select-container {
