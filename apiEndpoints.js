@@ -1,21 +1,18 @@
-// const urlParser = new URL(window.location.href);
-// const urlOrigin = urlParser.origin;
+const urlParser = new URL(window.location.href);
+const urlOrigin = urlParser.origin;
 
-// let apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
-// let mediaBaseUrl = process.env.REACT_APP_MEDIA_BASE_URL;
+let apiBaseUrl = "http://localhost:8000/api/radio-reports";
+let mediaBaseUrl = "http://localhost:8000/media";
 
-// if (!process.env.REACT_APP_API_BASE_URL) {
-//   apiBaseUrl = urlOrigin + "/api/radio-reports";
-//   console.warn(`Environment variable REACT_APP_API_BASE_URL not defined, will default to ${apiBaseUrl}`);
-// }
+if (!apiBaseUrl) {
+  apiBaseUrl = urlOrigin + "/api/radio-reports";
+  console.warn(`Environment variable REACT_APP_API_BASE_URL not defined, will default to ${apiBaseUrl}`);
+}
 
-// if (!process.env.REACT_APP_MEDIA_BASE_URL) {
-//   mediaBaseUrl = urlOrigin + "/media";
-//   console.warn(`Environment variable REACT_APP_MEDIA_BASE_URL not defined, will default to ${mediaBaseUrl}`);
-// }
-
-let apiBaseUrl = "http://localhost:8000/api/radio-reports"
-let mediaBaseUrl = "http://localhost:8000/media"
+if (!mediaBaseUrl) {
+  mediaBaseUrl = urlOrigin + "/media";
+  console.warn(`Environment variable REACT_APP_MEDIA_BASE_URL not defined, will default to ${mediaBaseUrl}`);
+}
 
 const segmentMeshesUrlPrefix = mediaBaseUrl + "/segment-meshes";
 
