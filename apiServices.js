@@ -23,21 +23,19 @@ class ApiClient {
           return responseData;
         }
 
-        responseData.result.report.report_metadata = tryParseJsonString(responseData.result.report.report_metadata);
-        
-        responseData.result.report.meshes_metadata = tryParseJsonString(responseData.result.report.meshes_metadata);
-        for (let i = 0; i < responseData.result.report.meshes_metadata.meshes.length; i++) {
-          responseData.result.report.meshes_metadata.meshes[i] = {
-            ...responseData.result.report.meshes_metadata.meshes[i],
-            geometricOrigin: tryParseJsonString(responseData.result.report.meshes_metadata.meshes[i].geometricOrigin),
+        const parsedReport = responseData.result.report;
+        parsedReport.report_metadata = tryParseJsonString(parsedReport.report_metadata);
+        parsedReport.meshes_metadata = tryParseJsonString(parsedReport.meshes_metadata);
+        parsedReport.simplified_reports = tryParseJsonString(parsedReport.simplified_reports);
+
+        for (let i = 0; i < parsedReport.meshes_metadata.meshes.length; i++) {
+          parsedReport.meshes_metadata.meshes[i] = {
+            ...parsedReport.meshes_metadata.meshes[i],
+            geometricOrigin: tryParseJsonString(parsedReport.meshes_metadata.meshes[i].geometricOrigin),
           };
         }
-        // responseData.result.report.original_report = tryParseJsonString(responseData.result.report.original_report);
-        responseData.result.report.simplified_reports = tryParseJsonString(
-          responseData.result.report.simplified_reports
-        );
-        // responseData.result.report.processing_status = tryParseJsonString(responseData.result.report.processing_status);
 
+        responseData.result.report = parsedReport;
         return responseData;
       },
     };

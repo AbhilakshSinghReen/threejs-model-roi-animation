@@ -43,8 +43,11 @@ class AnimatedScene {
       position: [this.camera.position.x, this.camera.position.y, this.camera.position.z],
       rotation: [this.camera.rotation.x, this.camera.rotation.y, this.camera.rotation.z],
     };
-    console.log(this.initialCameraTransform);
     this.createHelpers();
+
+    // this.animate = this.animate.bind(this);
+    // this.animate();
+    // return;
 
     this.loadGltfModel(this.gltfModelUrl, [0, 512, 0]); // TODO: remove the hardcoded 2nd param
 
@@ -132,6 +135,23 @@ class AnimatedScene {
   createHelpers() {
     this.gridHelper = new THREE.GridHelper(2000, 50);
     this.scene.add(this.gridHelper);
+
+    // this.dummyPointLight = new THREE.PointLight(0xffffff, 0);
+    // this.dummyPointLight.position.set(367, 263, 33);
+
+    // this.dummyPointLight.position.set(200, 100, 100);
+    // // this.pointPositionHelper.position.set(200, 100, 100);
+    // this.pointPositionHelper = new THREE.PointLightHelper(this.dummyPointLight, 100);
+    // this.scene.add(this.pointPositionHelper);
+  }
+
+  createPointPositionHelper(x, y, z) {
+    console.log(x, y, z);
+    this.dummyPointLight = new THREE.PointLight(0xffffff, 0);
+    this.dummyPointLight.position.set(x, y, z);
+    this.scene.add(this.dummyPointLight);
+    this.pointPositionHelper = new THREE.PointLightHelper(this.dummyPointLight, 100);
+    this.scene.add(this.pointPositionHelper);
   }
 
   assignButtonEventHandlers() {
@@ -238,7 +258,7 @@ class AnimatedScene {
 
     const currentSegmentOfInterestName = this.segmentsOfInterest[this.currentSegmentOfInterestIndex];
     const currentSegmentOfInterestMeshData = this.segmentMeshesData.find(
-      (obj) => (obj.name = currentSegmentOfInterestName)
+      (obj) => obj.name === currentSegmentOfInterestName
     );
     currentSegmentNameTextElement.innerText = currentSegmentOfInterestName;
     return {
@@ -261,17 +281,44 @@ class AnimatedScene {
       return;
     }
 
+    // this.createPointPositionHelper(
+    //   currentSegmentOfInterestData.origin[0],
+    //   currentSegmentOfInterestData.origin[1],
+    //   currentSegmentOfInterestData.origin[2]
+    // );
+
     this.scene.traverse((node) => {
       if (node.isMesh) {
+        // console.log(node.name);
         if (node.name === currentSegmentOfInterestData.name) {
+          // node.material.transparent = false;
           node.material.transparent = false;
           node.material.opacity = 1;
+
+          // var center = new THREE.Vector3();
+          // node.geometry.computeBoundingBox();
+          // node.geometry.boundingBox.getCenter(center);
+          // node.geometry.center();
+          // console.log(node.geometry.center());
+          // console.log(center);
+          // mesh.position.copy(center);
+
+          // this.orbitControls.target.set(center.x, center.y, center.z);
+          // this.createPointPositionHelper(center.x, center.y, center.z);
         } else {
           node.material.transparent = true;
-          node.material.opacity = 0;
+          node.material.opacity = 0.2;
         }
       }
     });
+
+    // this.orbitControls.target.set(
+    //   currentSegmentOfInterestData.origin[0],
+    //   currentSegmentOfInterestData.origin[1],
+    //   currentSegmentOfInterestData.origin[2]
+    // );
+
+    // console.log(currentSegmentOfInterestData.origin);
 
     // pass
   }
@@ -388,6 +435,9 @@ class AnimatedScene {
     // this.updateSceneFromAnimatorState(updatedAnimatorState, deltaTime);
 
     this.orbitControls.update();
+
+    // console.log(this.camera.position);
+    // console.log(this.camera.rotation);
 
     // console.log(this.camera.position);
     // console.log(this.camera.rotation);
