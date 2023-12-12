@@ -11,4 +11,16 @@ function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export { getPathPart, delay, randomInt };
+function downloadBlob(blob) {
+  const downloadLink = document.createElement("a");
+  downloadLink.href = URL.createObjectURL(blob);
+  downloadLink.download = "recording.wav";
+  downloadLink.textContent = "Download Audio";
+  downloadLink.style.display = "block";
+
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
+}
+
+export { getPathPart, delay, randomInt, downloadBlob };
