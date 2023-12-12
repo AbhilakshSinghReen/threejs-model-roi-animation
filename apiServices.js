@@ -38,6 +38,26 @@ class ApiClient {
         responseData.result.report = parsedReport;
         return responseData;
       },
+      askQuestion: async (reportId, questionText = undefined, questionAudio = undefined) => {
+        if (!questionText) {
+          console.error("questionText must be provided");
+          return;
+        }
+
+        const endpoint = apiEndpoints.reports.askQuestion();
+
+        const formData = new FormData();
+
+        formData.append("reportId", reportId);
+        formData.append("questionText", questionText);
+
+        const response = await fetch(endpoint, {
+          method: "POST",
+          body: formData,
+        });
+        const responseData = await response.json();
+        return responseData;
+      },
     };
   }
 }

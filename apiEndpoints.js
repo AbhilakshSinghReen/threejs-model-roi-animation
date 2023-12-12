@@ -21,6 +21,9 @@ const apiEndpoints = {
     getDetail: () => {
       return `${apiBaseUrl}/reports/get-detail/`;
     },
+    askQuestion: () => {
+      return `${apiBaseUrl}/reports/ask-question-based-on-report/`;
+    },
   },
 };
 
