@@ -4,6 +4,8 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { mediaBaseUrl } from "./apiEndpoints";
 import { getProperSegmentName, getMaterialForMeshName } from "./utils/segmentsUtils";
 
+const SCENE_TO_SCREEN_HEIGHT_RATIO = 0.65;
+
 class AnimatedScene {
   constructor(reportData) {
     this.reportData = reportData;
@@ -51,7 +53,12 @@ class AnimatedScene {
   }
 
   createCameraBoom() {
-    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10_000);
+    this.camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / (window.innerHeight * SCENE_TO_SCREEN_HEIGHT_RATIO),
+      0.1,
+      10_000
+    );
     this.cameraLight = new THREE.PointLight(0xffffff, 1);
     this.cameraBoom = new THREE.Group();
 
@@ -69,7 +76,7 @@ class AnimatedScene {
       canvas: document.querySelector("#bg"),
     });
     this.renderer.setPixelRatio(window.devicePixelRatio);
-    // this.renderer.setSize(window.innerWidth, window.innerHeight); // TODO: Uncomment this and do it in a proper way
+    this.renderer.setSize(window.innerWidth, window.innerHeight * SCENE_TO_SCREEN_HEIGHT_RATIO);
     //   renderer.render(this,scene, this.camera);
   }
 
@@ -199,7 +206,12 @@ class AnimatedScene {
   }
 
   createBasicCamera() {
-    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    this.camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / (window.innerHeight * SCENE_TO_SCREEN_HEIGHT_RATIO),
+      0.1,
+      1000
+    );
     this.camera.position.setZ(30);
     this.camera.position.setX(-3);
   }

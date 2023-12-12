@@ -11,6 +11,8 @@ import { addInnerTextWithTypewriterEffect } from "./utils/textAnimationUtils";
 // import segmentMeshRenderingConfig from "./segmentMaterials.json";
 import apiClient from "./apiServices";
 
+const SIMPLIFIED_REPORT_DEFAULT_LANGUAGE = "English";
+
 async function main() {
   const reportId = getPathPart(window.location.pathname, 2);
   const responseData = await apiClient.reports.getDetail(reportId);
@@ -21,9 +23,7 @@ async function main() {
 
   const reportData = responseData.result.report;
   const simplifiedReportsAvailableLanguages = Object.keys(reportData.simplified_reports);
-  const simplifiedReportsPreviouslySelectedLanguages = new Set();
-  console.log(reportData.simplified_reports);
-  console.log(simplifiedReportsAvailableLanguages);
+  const simplifiedReportsPreviouslySelectedLanguages = new Set([SIMPLIFIED_REPORT_DEFAULT_LANGUAGE]);
 
   const languageSelectElement = document.getElementById("simplified-text-language-select");
   const reportTextElement = document.getElementById("text-displayer-text");
@@ -35,6 +35,13 @@ async function main() {
     languageSelectElement.add(selectOption);
   }
 
+  addInnerTextWithTypewriterEffect(
+    reportTextElement,
+    reportData.simplified_reports[SIMPLIFIED_REPORT_DEFAULT_LANGUAGE],
+    20,
+    20
+  );
+
   languageSelectElement.addEventListener("change", async function () {
     const selectedLanguage = languageSelectElement.value;
 
@@ -43,7 +50,8 @@ async function main() {
       return;
     }
 
-    await addInnerTextWithTypewriterEffect(reportTextElement, reportData.simplified_reports[selectedLanguage], 20, 20);
+    simplifiedReportsPreviouslySelectedLanguages.add(selectedLanguage);
+    addInnerTextWithTypewriterEffect(reportTextElement, reportData.simplified_reports[selectedLanguage], 20, 20);
   });
 
   const animatedScene = new AnimatedScene(reportData);
