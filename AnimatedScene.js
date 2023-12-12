@@ -254,6 +254,7 @@ class AnimatedScene {
     if (currentSegmentOfInterestData.name === "full_body") {
       this.scene.traverse((node) => {
         if (node.isMesh) {
+          node.material.transparent = false;
           node.material.opacity = 1;
         }
       });
@@ -263,9 +264,11 @@ class AnimatedScene {
     this.scene.traverse((node) => {
       if (node.isMesh) {
         if (node.name === currentSegmentOfInterestData.name) {
+          node.material.transparent = false;
           node.material.opacity = 1;
         } else {
-          node.material.opacity = 0.2;
+          node.material.transparent = true;
+          node.material.opacity = 0;
         }
       }
     });
