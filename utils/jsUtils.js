@@ -3,4 +3,12 @@ function getPathPart(path, partIndex) {
   return parseInt(pathParts[partIndex]);
 }
 
-export { getPathPart };
+async function delay(ms) {
+  await new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export { getPathPart, delay, randomInt };

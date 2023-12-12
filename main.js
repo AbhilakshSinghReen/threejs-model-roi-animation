@@ -6,6 +6,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import AnimatedScene from "./AnimatedScene";
 import { mediaBaseUrl } from "./apiEndpoints";
 import { getPathPart } from "./utils/jsUtils";
+import { addInnerTextWithTypewriterEffect } from "./utils/textAnimationUtils";
 
 // import segmentMeshRenderingConfig from "./segmentMaterials.json";
 import apiClient from "./apiServices";
@@ -19,6 +20,31 @@ async function main() {
   }
 
   const reportData = responseData.result.report;
+  const simplifiedReportsAvailableLanguages = Object.keys(reportData.simplified_reports);
+  const simplifiedReportsPreviouslySelectedLanguages = new Set();
+  console.log(reportData.simplified_reports);
+  console.log(simplifiedReportsAvailableLanguages);
+
+  const languageSelectElement = document.getElementById("simplified-text-language-select");
+  const reportTextElement = document.getElementById("text-displayer-text");
+
+  for (const language of simplifiedReportsAvailableLanguages) {
+    const selectOption = document.createElement("option");
+    selectOption.text = language;
+    selectOption.value = language;
+    languageSelectElement.add(selectOption);
+  }
+
+  languageSelectElement.addEventListener("change", async function () {
+    const selectedLanguage = languageSelectElement.value;
+
+    if (simplifiedReportsPreviouslySelectedLanguages.has(selectedLanguage)) {
+      reportTextElement.innerText = reportData.simplified_reports[selectedLanguage];
+      return;
+    }
+
+    await addInnerTextWithTypewriterEffect(reportTextElement, reportData.simplified_reports[selectedLanguage], 20, 20);
+  });
 
   const animatedScene = new AnimatedScene(reportData);
 

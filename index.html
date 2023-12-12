@@ -3,11 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Abnormal Docs</title>
   </head>
   <body>
-    <canvas id="bg"></canvas>
+    <div id="threejs-scene-displayer">
+      <canvas id="bg"></canvas>
+    </div>
+
+    <div id="text-displayer">
+      <div id="text-displayer-header">
+        <div id="report-metadata-displayer">
+          <h2>Patient Name</h2>
+          <h2>Report Date</h2>
+        </div>
+        <div id="simplified-text-language-select-container">
+          <select id="simplified-text-language-select">
+            <!-- Options will be added dynamically using JavaScript -->
+          </select>
+        </div>
+      </div>
+
+      <p id="text-displayer-text">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio, <br />
+        odit perferendis vitae nisi obcaecati laudantium maiores, sit assumenda temporibus doloremque vel ducimus
+        consequatur facilis, neque quidem eum maxime eos cum.
+      </p>
+    </div>
+
     <script type="module" src="/main.js"></script>
   </body>
 </html>

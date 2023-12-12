@@ -69,7 +69,7 @@ class AnimatedScene {
       canvas: document.querySelector("#bg"),
     });
     this.renderer.setPixelRatio(window.devicePixelRatio);
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    // this.renderer.setSize(window.innerWidth, window.innerHeight); // TODO: Uncomment this and do it in a proper way
     //   renderer.render(this,scene, this.camera);
   }
 
@@ -115,9 +115,7 @@ class AnimatedScene {
     );
   }
 
-  getAnimatorStateForFocusingGeometry(origin, shape) {
-    
-  }
+  getAnimatorStateForFocusingGeometry(origin, shape) {}
 
   // set target animation state for AnimationState
   // get current and update lerped until target is met
@@ -138,7 +136,6 @@ class AnimatedScene {
 
       const targetGeometricOrigin = segmentOfInterestMeshData.geometricOrigin;
       const targetGeometryShape = [this.volumeShape[0] / 3, this.volumeShape[1] / 3, this.volumeShape[2] / 3]; // TODO: get this from mesh data
-
     } else if (animationState === this.AnimationStates.ROI_ZOOM_IN) {
     } else if (animationState === this.AnimationStates.ROI_TURNTABLE) {
     } else if (animationState === this.AnimationStates.ROI_ZOOM_OUT) {
