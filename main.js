@@ -10,12 +10,9 @@ import { addInnerTextWithTypewriterEffect } from "./utils/textAnimationUtils";
 
 // import segmentMeshRenderingConfig from "./segmentMaterials.json";
 import apiClient from "./apiServices";
+import speechRecognizer from "./apis/speechRecognition";
 
 const SIMPLIFIED_REPORT_DEFAULT_LANGUAGE = "English";
-
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
-const SpeechRecognitionEvent = window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
 
 async function main() {
   const reportId = getPathPart(window.location.pathname, 2);
@@ -25,22 +22,11 @@ async function main() {
     return;
   }
 
-  const speechRecognition = new SpeechRecognition();
-  // speechRecognition.interimResults = true;
-
-  speechRecognition.addEventListener("result", (e) => {
-    const combinedText = Array.from(e.results)
-      .map((result) => result[0])
-      .map((result) => result.transcript)
-      .join(" ");
-    console.log(combinedText);
+  speechRecognizer.runSpeechRecognition((text) => {
+    console.log(text);
   });
 
-  // speechRecognition.addEventListener('end', e=>{
-
-  // })
-
-  speechRecognition.start();
+  //////////////////
 
   const reportData = responseData.result.report;
   const simplifiedReportsAvailableLanguages = Object.keys(reportData.simplified_reports);
