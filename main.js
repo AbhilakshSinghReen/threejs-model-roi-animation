@@ -63,8 +63,10 @@ async function main() {
 
   const askQuestionMicButtonElement = document.getElementById("ask-question-mic-button");
   askQuestionMicButtonElement.onclick = () => {
-    speechRecognizer.runSpeechRecognition(async (recognizedText) => {
-      const askQuestionResponseData = await apiClient.reports.askQuestion(reportId, recognizedText);
+    const selectedLanguage = languageSelectElement.value;
+
+    speechRecognizer.runSpeechRecognition(selectedLanguage, async (recognizedText) => {
+      const askQuestionResponseData = await apiClient.reports.askQuestion(reportId, selectedLanguage, recognizedText);
       if (!askQuestionResponseData.success) {
         // TODO: add audio to say an error occurred
         console.log(askQuestionResponseData);
@@ -73,7 +75,7 @@ async function main() {
 
       const answerText = askQuestionResponseData.result.answer;
       console.log(answerText);
-      speechSynthesizer.speakText(answerText);
+      speechSynthesizer.speakText(selectedLanguage, answerText);
     });
   };
 

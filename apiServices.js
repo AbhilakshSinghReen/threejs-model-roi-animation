@@ -38,7 +38,7 @@ class ApiClient {
         responseData.result.report = parsedReport;
         return responseData;
       },
-      askQuestion: async (reportId, questionText = undefined, questionAudio = undefined) => {
+      askQuestion: async (reportId, language, questionText = undefined, questionAudio = undefined) => {
         if (!questionText) {
           console.error("questionText must be provided");
           return;
@@ -49,6 +49,7 @@ class ApiClient {
         const formData = new FormData();
 
         formData.append("reportId", reportId);
+        formData.append("language", language);
         formData.append("questionText", questionText);
 
         const response = await fetch(endpoint, {

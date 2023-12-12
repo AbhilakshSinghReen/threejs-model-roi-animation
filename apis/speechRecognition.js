@@ -27,7 +27,7 @@ class SpeechRecognizer {
     });
   }
 
-  async runSpeechRecognition(onCompleted) {
+  async runSpeechRecognition(language, onCompleted) {
     const audioRecorderStream = await navigator.mediaDevices.getUserMedia({ audio: true });
     this.audioRecorder = new MediaRecorder(audioRecorderStream);
     this.audioChunks = [];

@@ -8,19 +8,19 @@ class SpeechSynthesizer {
     }
   }
 
-  speakText(text) {
+  speakText(language, text) {
     if (text === "") {
       return;
     }
 
     const utterance = new SpeechSynthesisUtterance(text);
+    if (language === "Hindi") {
+      utterance.lang = "hi-IN";
+    }
+
     speechSynthesis.speak(utterance);
   }
 }
 
 const speechSynthesizer = new SpeechSynthesizer();
-
-// console.log("Speaking some dummy text");
-// speechSynthesizer.speakText("dummy text");
-
 export default speechSynthesizer;
