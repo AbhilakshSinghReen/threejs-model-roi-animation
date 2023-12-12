@@ -146,7 +146,7 @@ class AnimatedScene {
   }
 
   createPointPositionHelper(x, y, z) {
-    console.log(x, y, z);
+    // console.log(x, y, z);
     this.dummyPointLight = new THREE.PointLight(0xffffff, 0);
     this.dummyPointLight.position.set(x, y, z);
     this.scene.add(this.dummyPointLight);
@@ -189,8 +189,8 @@ class AnimatedScene {
       }
       this.setTargetAnimatorState();
 
-      console.log(this.currentSegmentOfInterestIndex);
-      console.log(this.segmentsOfInterest);
+      // console.log(this.currentSegmentOfInterestIndex);
+      // console.log(this.segmentsOfInterest);
     };
 
     nextButton.onclick = () => {
@@ -200,8 +200,8 @@ class AnimatedScene {
       }
       this.setTargetAnimatorState();
 
-      console.log(this.currentSegmentOfInterestIndex);
-      console.log(this.segmentsOfInterest);
+      // console.log(this.currentSegmentOfInterestIndex);
+      // console.log(this.segmentsOfInterest);
     };
   }
 
@@ -216,10 +216,10 @@ class AnimatedScene {
 
         mainMesh.traverse((node) => {
           if (node.isMesh) {
-            console.log(node.name);
+            // console.log(node.name);
             node.name = getProperSegmentName(node.name);
-            console.log(node.name);
-            console.log("-----");
+            // console.log(node.name);
+            // console.log("-----");
 
             const meshMaterialDetails = getMaterialForMeshName(node.name);
             const meshMaterial = new THREE.MeshStandardMaterial({

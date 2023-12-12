@@ -11,6 +11,7 @@ import { addInnerTextWithTypewriterEffect } from "./utils/textAnimationUtils";
 // import segmentMeshRenderingConfig from "./segmentMaterials.json";
 import apiClient from "./apiServices";
 import speechRecognizer from "./apis/speechRecognition";
+import speechSynthesizer from "./apis/speechSynthesis";
 
 const SIMPLIFIED_REPORT_DEFAULT_LANGUAGE = "English";
 
@@ -71,7 +72,8 @@ async function main() {
       }
 
       const answerText = askQuestionResponseData.result.answer;
-      // TODO: speak this answer out loud
+      console.log(answerText);
+      speechSynthesizer.speakText(answerText);
     });
   };
 

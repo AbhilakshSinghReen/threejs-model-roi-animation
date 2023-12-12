@@ -8,7 +8,7 @@ class SpeechSynthesizer {
     }
   }
 
-  textToSpeech(text) {
+  speakText(text) {
     if (text === "") {
       return;
     }
@@ -19,4 +19,8 @@ class SpeechSynthesizer {
 }
 
 const speechSynthesizer = new SpeechSynthesizer();
-export default { speechSynthesizer };
+
+// console.log("Speaking some dummy text");
+// speechSynthesizer.speakText("dummy text");
+
+export default speechSynthesizer;
