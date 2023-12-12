@@ -22,10 +22,6 @@ async function main() {
     return;
   }
 
-  speechRecognizer.runSpeechRecognition((text) => {
-    console.log(text);
-  });
-
   //////////////////
 
   const reportData = responseData.result.report;
@@ -65,7 +61,19 @@ async function main() {
   document.getElementById("report-date-text").innerText = reportData.report_metadata?.reportDate;
 
   const askQuestionMicButtonElement = document.getElementById("ask-question-mic-button");
-  askQuestionMicButtonElement.onclick = () => {};
+  askQuestionMicButtonElement.onclick = () => {
+    speechRecognizer.runSpeechRecognition(async (recognizedText) => {
+      const askQuestionResponseData = await apiClient.reports.askQuestion(reportId, recognizedText);
+      if (!askQuestionResponseData.success) {
+        // TODO: add audio to say an error occurred
+        console.log(askQuestionResponseData);
+        return;
+      }
+
+      const answerText = askQuestionResponseData.result.answer;
+      // TODO: speak this answer out loud
+    });
+  };
 
   const animatedScene = new AnimatedScene(reportData);
 
