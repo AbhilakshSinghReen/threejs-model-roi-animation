@@ -4,10 +4,10 @@ async function addInnerTextWithTypewriterEffect(element, text, minSpeed, maxSpee
   let currentTextIndex = 0;
 
   while (currentTextIndex < text.length) {
-    currentTextIndex += randomInt(0, 10);
+    currentTextIndex += randomInt(5,6);
     currentTextIndex = Math.min(text.length, currentTextIndex);
 
-    await delay(randomInt(0, 100));
+    await delay(randomInt(90, 100));
 
     element.innerText = text.substring(0, currentTextIndex);
   }

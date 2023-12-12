@@ -220,6 +220,12 @@ class AnimatedScene {
 
   animate() {
     requestAnimationFrame(this.animate);
+    const deltaTime = this.mainClock.getDelta();
+
+    const updatedAnimatorState = {
+      cameraBoomYRotationIncrement: 0.25,
+    };
+    this.updateSceneFromAnimatorState(updatedAnimatorState, deltaTime);
 
     this.renderer.render(this.scene, this.camera);
   }
