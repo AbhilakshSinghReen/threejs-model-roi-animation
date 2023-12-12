@@ -13,6 +13,10 @@ import apiClient from "./apiServices";
 
 const SIMPLIFIED_REPORT_DEFAULT_LANGUAGE = "English";
 
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
+const SpeechRecognitionEvent = window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
+
 async function main() {
   const reportId = getPathPart(window.location.pathname, 2);
   const responseData = await apiClient.reports.getDetail(reportId);
@@ -20,6 +24,23 @@ async function main() {
     console.error("Failed to get report details from server");
     return;
   }
+
+  const speechRecognition = new SpeechRecognition();
+  // speechRecognition.interimResults = true;
+
+  speechRecognition.addEventListener("result", (e) => {
+    const combinedText = Array.from(e.results)
+      .map((result) => result[0])
+      .map((result) => result.transcript)
+      .join(" ");
+    console.log(combinedText);
+  });
+
+  // speechRecognition.addEventListener('end', e=>{
+
+  // })
+
+  speechRecognition.start();
 
   const reportData = responseData.result.report;
   const simplifiedReportsAvailableLanguages = Object.keys(reportData.simplified_reports);
@@ -56,6 +77,9 @@ async function main() {
 
   document.getElementById("report-type-text").innerText = reportData.report_metadata?.reportType;
   document.getElementById("report-date-text").innerText = reportData.report_metadata?.reportDate;
+
+  const askQuestionMicButtonElement = document.getElementById("ask-question-mic-button");
+  askQuestionMicButtonElement.onclick = () => {};
 
   const animatedScene = new AnimatedScene(reportData);
 
