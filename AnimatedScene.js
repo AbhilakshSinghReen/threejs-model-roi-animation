@@ -161,13 +161,14 @@ class AnimatedScene {
     const nextButton = document.getElementById("next-button");
 
     playPauseButton.onclick = () => {
-      const currentButtonText = playPauseButton.innerText;
-      if (currentButtonText === "Pause") {
+      const currentButtonHtml = playPauseButton.innerHTML.trim();
+
+      if (currentButtonHtml === '<i class="fa fa-pause-circle fa-fw"></i>') {
         this.orbitControls.autoRotate = false;
-        playPauseButton.innerText = "Play";
+        playPauseButton.innerHTML = '<i class="fa fa-play fa-fw"></i>';
       } else {
         this.orbitControls.autoRotate = true;
-        playPauseButton.innerText = "Pause";
+        playPauseButton.innerHTML = '<i class="fa fa-pause-circle fa-fw"></i>';
       }
     };
 

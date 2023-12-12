@@ -4,6 +4,14 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Abnormal Docs</title>
   </head>
@@ -11,14 +19,22 @@
     <div id="threejs-scene-displayer">
       <canvas id="bg"></canvas>
       <h2 id="current-segment-name-text">Current Segment Name</h2>
-      <button class="animation-button" id="play-pause-button" style="top: 10px">Pause</button>
-      <button class="animation-button" id="reset-button" style="top: 40px">Reset</button>
-      <button class="animation-button" id="prev-button" style="top: 70px">Prev</button>
-      <button class="animation-button" id="next-button" style="top: 100 px">Next</button>
+      <button class="animation-button btn" id="play-pause-button" style="top: 10px">
+        <i class="fa fa-pause-circle fa-fw"></i>
+      </button>
+      <button class="animation-button btn" id="reset-button" style="top: 55px">
+        <i class="fa fa-repeat fa-fw"></i>
+      </button>
+      <button class="animation-button btn" id="prev-button" style="top: 100px">
+        <i class="fa fa-chevron-left fa-fw"></i>
+      </button>
+      <button class="animation-button btn" id="next-button" style="top: 145px">
+        <i class="fa fa-chevron-right fa-fw"></i>
+      </button>
     </div>
 
     <div id="text-displayer">
-      <div id="text-displayer-header">
+      <div id="text-displayer-header" style="padding: 10px">
         <div id="report-metadata-displayer">
           <h2 id="patient-name-text">Patient Name</h2>
           <span id="report-type-and-date-container">
@@ -28,15 +44,19 @@
           </span>
         </div>
         <div id="simplified-text-language-select-container">
-          <select id="simplified-text-language-select">
-            <!-- Options will be added dynamically using JavaScript -->
-          </select>
+          <select class="form-select form-select-sm" id="simplified-text-language-select"></select>
         </div>
+        <i class="bi bi-arrow-bar-down"></i>
       </div>
 
       <p id="text-displayer-text"></p>
     </div>
 
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
     <script type="module" src="/main.js"></script>
   </body>
 </html>
